@@ -1,0 +1,52 @@
+OVERVIEW
+========
+
+???
+
+
+COMPILING
+=========
+
+To build this project, simply run the Make utility.
+
+$ make
+
+
+INSTALLING
+==========
+
+To install the code to the ATMega32, we once again use Make.
+
+$ make install
+
+
+HARDWARE
+========
+
+???
+
+
+RUNNING
+=======
+
+The program will begin running automatically after running 'make install'. To
+restart the program, hit the RESET switch on the development board.
+
+
+SIZE
+====
+
+As part of this assignment, we were asked to determine the size in bytes of
+each function used in this project. This data is most easily presented in a
+table.
+
++-------------------------+------+
+| FUNCTION                | SIZE |
++-------------------------+------+
++-------------------------+------+
+
+
+CREDITS
+=======
+
+Written by Mason Fabel on 7 April 2016.

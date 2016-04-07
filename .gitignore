@@ -1,0 +1,7 @@
+# Binary files
+avr-os
+*.o
+*.hex
+
+# VIM temp files
+*.swp
