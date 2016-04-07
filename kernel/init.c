@@ -23,6 +23,8 @@ void _uik_init_kernel(void) {
 }
 
 void _uik_init_timer(uint16_t tick_len) {
+	_uik_tick_len = tick_len;
+
 	TCCR1A = _UIK_TIMER_MODE_CTC_A | _UIK_TIMER_MODE_NORMAL_PORT;
 	TCCR1B = _UIK_TIMER_MODE_CTC_B | _UIK_TIMER_PRESCALER_1;
 
@@ -31,7 +33,7 @@ void _uik_init_timer(uint16_t tick_len) {
 	TCNT1H = 0x00;
 	TCNT1L = 0x00;
 
-	OCR1A = tick_len;
+	OCR1A = _uik_tick_len;
 
 	return;
 }
