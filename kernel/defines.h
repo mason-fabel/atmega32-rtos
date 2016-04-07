@@ -3,6 +3,7 @@
 
 #include "dispatch.h"
 #include "idle.h"
+#include "init.h"
 #include "kernel.h"
 #include "task.h"
 #include "tick.h"

@@ -8,6 +8,7 @@ struct _uik_queue_node{
 typedef struct _uik_queue_node _uik_queue_node_t;
 
 _uik_queue_node_t *_uik_queue_ready;
+_uik_queue_node_t *_uik_queue_blocked;
 
 void _uik_queue_insert(_uik_queue_node_t *head, _uik_tcb_t *tcb);
 _uik_tcb_t *_uik_queue_next(_uik_queue_node_t *head);

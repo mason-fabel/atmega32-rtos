@@ -10,7 +10,7 @@ void _uik_queue_insert(_uik_queue_node_t *head, _uik_tcb_t *tcb) {
 	new->next = NULL;
 
 	for (ptr = head; ptr != NULL; ptr = ptr->next) {
-		if (new->task->pri > ptr->task->pri) {
+		if ((new->task)->pri > (ptr->task)->pri) {
 			new->next = ptr->next;
 			ptr->next = new;
 			break;

@@ -10,11 +10,9 @@ all : $(OBJ)
 %.o : %.c
 	$(CC) $(CFLAGS) -c $<
 
-dispatch.c : defines.h dispatch.h
-idle.c : defines.h idle.h
-init.c : defines.h
-task.c : defines.h task.h
-tick.c : defines.h tick.h
+%.c : %.h defines.h
+
+defines.h : $(wildcard *.h)
 
 clean :
 	\rm -f $(OBJ)
