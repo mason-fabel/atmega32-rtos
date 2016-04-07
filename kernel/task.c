@@ -32,8 +32,6 @@ void uik_task_run(uint8_t pid) {
 
 	cli();
 
-	task = NULL;
-
 	for (ptr = _uik_queue_blocked; ptr->next != NULL; ptr = ptr->next) {
 		if (((ptr->next)->task)->pid == pid) {
 			node = ptr->next;
@@ -49,19 +47,19 @@ void uik_task_run(uint8_t pid) {
 		}
 	}
 
-	if (task == NULL) {
-		/* unable to find task */
-	}
-
 	sei();
 
 	return;
 }
 
 void uik_schedule(void) {
+	cli();
+
 	/* TODO:
 	 * Implement me!
 	 */
+
+	sei();
 
 	return;
 }
