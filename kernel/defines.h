@@ -2,7 +2,6 @@
 #define _KERNEL_DEFINES_H_
 
 #include "dispatch.h"
-#include "idle.h"
 #include "init.h"
 #include "kernel.h"
 #include "task.h"
