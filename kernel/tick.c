@@ -2,6 +2,8 @@
 #include "defines.h"
 
 ISR(TIMER1_COMPA_vect, ISR_NAKED) {
+	cli();
+
 	asm volatile (
 		"push r0 \n\t"
 		"push r1 \n\t"
@@ -87,4 +89,6 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED) {
 		"pop r1 \n\t"
 		"pop r0 \n\t"
 	);
+
+	sei();
 }
