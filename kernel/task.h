@@ -4,8 +4,8 @@
 #include <inttypes.h>
 #include "defines.h"
 
-#define _UIK_TASK_PRIORITY_MIN 0xFFFF
-#define _UIK_TASK_PRIORITY_MAX 0x0000
+#define _UIK_TASK_PRIORITY_MIN 0xFF
+#define _UIK_TASK_PRIORITY_MAX 0x00
 #define _UIK_TASK_STACK_MIN 50
 
 struct _uik_stack {
