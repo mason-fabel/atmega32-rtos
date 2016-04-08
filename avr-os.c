@@ -12,7 +12,7 @@ void task_b(void);
 int init(void) {
 	int status = 0;
 
-	uik_initialize(100);
+	uik_initialize(100, 4);
 
 	if(!(pid_a = uik_task_add(task_a, 1, 300))) {
 		status = -1;

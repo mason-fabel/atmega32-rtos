@@ -1,18 +1,22 @@
+#include <inttypes.h>
 #include <stdlib.h>
 #include "defines.h"
 
-void _uik_queue_insert(_uik_queue_node_t *head, _uik_tcb_t *tcb) {
+void _uik_queue_insert(_uik_queue_node_t *head, uint8_t pid) {
 	_uik_queue_node_t *new;
 	_uik_queue_node_t *ptr;
 
 	new = malloc(sizeof(_uik_queue_node_t));
-	new->task = tcb;
+	new->pid = pid;
 	new->next = NULL;
 
 	for (ptr = head; ptr != NULL; ptr = ptr->next) {
 		if (ptr->next == NULL) {
 			ptr->next = new;
-		} else if ((new->task)->pri < ((ptr->next)task)->pri) {
+		} else if (
+			_uik_task_table[new->pid]->pri 
+			< _uik_task_table[(ptr->next)->pid]->pri
+		) {
 			new->next = ptr->next;
 			ptr->next = new;
 			break;
@@ -20,16 +24,18 @@ void _uik_queue_insert(_uik_queue_node_t *head, _uik_tcb_t *tcb) {
 	}
 }
 
-_uik_tcb_t *_uik_queue_next(_uik_queue_node_t *head) {
+uint8_t _uik_queue_next(_uik_queue_node_t *head) {
+	uint8_t pid;
 	_uik_queue_node_t *next;
-	_uik_tcb_t *out;
+	_uik_queue_node_t *out;
 
-	out = head->task;
-	next = head->next;
+	out = head->next;
+	pid = out->pid;
+	next = out->next;
 
-	free(head);
+	free(out);
 
-	head = next;
+	head->next = next;
 
-	return out;
+	return pid;
 }

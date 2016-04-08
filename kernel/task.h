@@ -24,6 +24,7 @@ struct _uik_tcb {
 typedef struct _uik_tcb _uik_tcb_t;
 
 uint8_t _uik_task_next_pid;
+_uik_tcb_t **_uik_task_table;
 
 void _uik_task_idle(void);
 

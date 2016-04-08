@@ -16,9 +16,9 @@ uint8_t uik_task_add(uik_taskptr_t task, uint8_t priority, uint16_t stack_len) {
 	(new->stk).head = malloc(sizeof(stack_len));
 	(new->stk).ptr = (new->stk).head;
 
-	_uik_task_next_pid++;
+	_uik_task_table[_uik_task_next_pid] = new;
 
-	_uik_queue_insert(_uik_queue_blocked, new);
+	_uik_task_next_pid++;
 
 	sei();
 
@@ -26,26 +26,9 @@ uint8_t uik_task_add(uik_taskptr_t task, uint8_t priority, uint16_t stack_len) {
 }
 
 void uik_task_run(uint8_t pid) {
-	_uik_queue_node_t *ptr;
-	_uik_queue_node_t *node;
-	_uik_tcb_t *task;
-
 	cli();
 
-	for (ptr = _uik_queue_blocked; ptr->next != NULL; ptr = ptr->next) {
-		if (((ptr->next)->task)->pid == pid) {
-			node = ptr->next;
-			task = node->task;
-
-			ptr->next = node->next;
-
-			free(node);
-
-			_uik_queue_insert(_uik_queue_ready, task);
-
-			break;
-		}
-	}
+	_uik_queue_insert(_uik_queue_ready, pid);
 
 	sei();
 
