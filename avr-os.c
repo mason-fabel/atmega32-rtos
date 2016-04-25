@@ -1,41 +1,40 @@
 #include <avr/interrupt.h>
+#include <avr/io.h>
+#include <util/delay.h>
 #include <stdlib.h>
 #include "kernel/kernel.h"
+#include "kernel/tick.h"
 
-uint8_t pid_a;
-uint8_t pid_b;
-
-int init(void);
+void init(void);
 void task_a(void);
 void task_b(void);
 
-int init(void) {
-	int status = 0;
+void init(void) {
+	DDRA = 0x00;
+	DDRB = 0xFF;
+
+	PORTB = ~0x00;
+	_delay_ms(100);
+	PORTB = ~0x80;
+	_delay_ms(100);
+	PORTB = ~0x00;
 
 	uik_initialize(100, 4);
 
-	if(!(pid_a = uik_task_add(task_a, 1, 300))) {
-		status = -1;
-	}
+/*
+	uik_task_run(uik_task_add(task_a, 1, 64));
+	uik_task_run(uik_task_add(task_b, 1, 64));
+*/
 
-	if(!(pid_b = uik_task_add(task_b, 2, 300))) {
-		status = -1;
-	}
+	sei();
 
-	return status;
+	return;
 }
 
 int main(void) {
-	if (init()) {
-		exit(-1);
-	}
+	init();
 
-	uik_task_run(pid_a);
-	uik_task_run(pid_b);
-
-	while (1) {
-		/* do nothing */
-	}
+	while (1) PORTB = ~0x01;
 
 	exit(0);
 }

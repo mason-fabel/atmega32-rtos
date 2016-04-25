@@ -10,32 +10,33 @@ void _uik_queue_insert(_uik_queue_node_t *head, uint8_t pid) {
 	new->pid = pid;
 	new->next = NULL;
 
-	for (ptr = head; ptr != NULL; ptr = ptr->next) {
-		if (ptr->next == NULL) {
-			ptr->next = new;
-		} else if (
-			_uik_task_table[new->pid]->pri 
-			< _uik_task_table[(ptr->next)->pid]->pri
-		) {
-			new->next = ptr->next;
-			ptr->next = new;
-			break;
+	if (head == NULL) {
+		head = new;
+	} else {
+		for (ptr = head; ptr != NULL; ptr = ptr->next) {
+			if (ptr->next == NULL) {
+				ptr->next = new;
+			} else if (
+				_uik_task_table[new->pid]->pri 
+				< _uik_task_table[(ptr->next)->pid]->pri
+			) {
+				new->next = ptr->next;
+				ptr->next = new;
+				break;
+			}
 		}
 	}
 }
 
 uint8_t _uik_queue_next(_uik_queue_node_t *head) {
 	uint8_t pid;
-	_uik_queue_node_t *next;
 	_uik_queue_node_t *out;
 
-	out = head->next;
-	pid = out->pid;
-	next = out->next;
+	out = head;
+	pid = head->pid;
+	head = head->next;;
 
 	free(out);
-
-	head->next = next;
 
 	return pid;
 }

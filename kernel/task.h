@@ -10,8 +10,9 @@
 
 struct _uik_stack {
 	uint16_t len;
-	void *head;
 	void *ptr;
+	uint8_t sptr_h;
+	uint8_t sptr_l;
 };
 typedef struct _uik_stack _uik_stack_t;
 
@@ -24,6 +25,7 @@ struct _uik_tcb {
 typedef struct _uik_tcb _uik_tcb_t;
 
 uint8_t _uik_task_next_pid;
+uint8_t _uik_task_active;
 _uik_tcb_t **_uik_task_table;
 
 void _uik_task_idle(void);

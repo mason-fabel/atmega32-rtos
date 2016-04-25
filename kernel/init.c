@@ -5,23 +5,30 @@
 #include "defines.h"
 
 void uik_initialize(uint16_t tick_len, uint8_t max_tasks) {
+	uint8_t idle_pid;
+
 	_uik_init_kernel(max_tasks);
 	_uik_init_timer(tick_len);
 
-	uik_task_add(_uik_task_idle, _UIK_TASK_PRIORITY_MIN, _UIK_TASK_STACK_MIN);
-
-	sei();
+	idle_pid = uik_task_add(_uik_task_idle, _UIK_TASK_PRIORITY_MIN,
+		_UIK_TASK_STACK_MIN);
+	uik_task_run(idle_pid);
 
 	return;
 }
 
 void _uik_init_kernel(uint8_t max_tasks) {
+	uint8_t i;
+
 	_uik_task_next_pid = 0;
+	_uik_task_active = 255;
 
 	_uik_task_table = malloc(sizeof(_uik_tcb_t*) * max_tasks);
-	_uik_queue_ready = malloc(sizeof(_uik_queue_node_t));
-	_uik_queue_ready->pid = -1;
-	_uik_queue_ready->next = NULL;
+	for (i = 0; i < max_tasks; i++) {
+		_uik_task_table[i] = NULL;
+	}
+
+	_uik_queue_ready = NULL;
 
 	return;
 }

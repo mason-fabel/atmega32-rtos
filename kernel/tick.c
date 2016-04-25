@@ -1,9 +1,10 @@
 #include <avr/interrupt.h>
+#include <stdlib.h>
 #include "defines.h"
 
-ISR(TIMER1_COMPA_vect, ISR_NAKED) {
-	cli();
+uint8_t sptr_tmp;
 
+ISR(TIMER1_COMPA_vect, ISR_NAKED) {
 	asm volatile (
 		"push r0 \n\t"
 		"push r1 \n\t"
@@ -37,25 +38,46 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED) {
 		"push r29 \n\t"
 		"push r30 \n\t"
 		"push r31 \n\t"
-		"in r0, __SREG__ \n\t"
-		"push r0 \n\t"
-		"in r0, __SP_L__ \n\t"
-		"push r0 \n\t"
-		"in r0, __SP_H__ \n\t"
+		"lds r0, __SREG__ \n\t"
 		"push r0 \n\t"
 	);
 
 	_uik_tick_num++;
 
-	/* switch context */
+	if (_uik_task_active == 255) {
+		/* Do nothing */
+	} else {
+		/* Save stack pointer */
+		asm volatile (
+			"ldi r20, __SP_L__ \n\t"
+			"sts sptr_tmp, r20 \n\t"
+		);
+		(_uik_task_table[_uik_task_active]->stk).sptr_l = sptr_tmp;
+		asm volatile (
+			"ldi r20, __SP_H__ \n\t"
+			"sts sptr_tmp, r20 \n\t"
+		);
+		(_uik_task_table[_uik_task_active]->stk).sptr_h = sptr_tmp;
+
+		while (1) PORTB = ~0x55;
+	}
+
+	_uik_task_active = _uik_queue_ready->pid;
+
+// 	sptr_tmp = (_uik_task_table[_uik_task_active]->stk).sptr_l;
+// 	asm volatile (
+// 		"ldi r20, sptr_tmp \n\t"
+// 		"out __SP_L__, r20 \n\t"
+// 	);
+// 	sptr_tmp = (_uik_task_table[_uik_task_active]->stk).sptr_h;
+// 	asm volatile (
+// 		"ldi r20, sptr_tmp \n\t"
+// 		"out __SP_H__, r20 \n\t"
+// 	);
 
 	asm volatile (
 		"pop r0 \n\t"
-		"out __SP_H__, r0 \n\t"
-		"pop r0 \n\t"
-		"out __SP_L__, r0 \n\t"
-		"pop r0 \n\t"
-		"out __SREG__, r0 \n\t"
+		"sts __SREG__, r0 \n\t"
 		"pop r31 \n\t"
 		"pop r30 \n\t"
 		"pop r29 \n\t"
@@ -90,5 +112,8 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED) {
 		"pop r0 \n\t"
 	);
 
-	sei();
+	asm volatile (
+		// "reti \n\t"
+		"ret \n\t"
+	);
 }
