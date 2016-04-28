@@ -21,6 +21,7 @@ uint8_t uik_task_add(uik_tptr_t tptr, uint8_t pri, uint8_t* sptr, uint16_t slen)
 	_uik_tcb[pid].priority = pri;
 	_uik_tcb[pid].pid = pid;
 	_uik_tcb[pid].sptr = stack_ptr - 1;
+	_uik_tcb[pid].delay = 0;
 
 	*stack_ptr = 0x11; 
 	stack_ptr--;
@@ -118,7 +119,9 @@ void uik_task_run(uint8_t pid) {
 }
 
 void _uik_task_idle() {
-	while (1) PORTB = ~0x66;
+	while (1) {
+		/* do nothing */
+	}
 
 	return;
 }

@@ -19,12 +19,25 @@ void _uik_dispatch(void) {
 	next_pid = _UIK_TASK_IDLE_PID;
 
 	for (i = 0; i < _uik_tasks_num; i++) {
-		if (_uik_tcb[i].state != ready) {
-			continue;
-		}
+		switch (_uik_tcb[i].state) {
+			case initialized:
+				break;
 
-		if (_uik_tcb[i].priority < _uik_tcb[next_pid].priority) {
-			next_pid = i;
+			case wait:
+				if (_uik_tcb[i].delay <= 0) {
+					_uik_tcb[i].state = ready;
+				}
+
+				_uik_tcb[i].delay--;
+
+				break;
+
+			case ready:
+				if (_uik_tcb[i].priority < _uik_tcb[next_pid].priority ) {
+					next_pid = i;
+				}
+
+				break;
 		}
 	}
 

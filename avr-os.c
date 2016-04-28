@@ -7,9 +7,13 @@
 
 void task_a(void);
 void task_b(void);
+void task_update(void);
 
 uint8_t stack_a[STACK_LEN] __attribute__((weak));
 uint8_t stack_b[STACK_LEN] __attribute__((weak));
+uint8_t stack_update[STACK_LEN] __attribute__((weak));
+
+uint8_t out;
 
 int main(void) {
 	DDRB = 0xFF;
@@ -21,8 +25,10 @@ int main(void) {
 
 	uik_initialize(100);
 
-	uik_task_run(uik_task_add(task_a, 101, stack_a, STACK_LEN));
+	out = 0x00;
+	uik_task_run(uik_task_add(task_a, 100, stack_a, STACK_LEN));
 	uik_task_run(uik_task_add(task_b, 100, stack_b, STACK_LEN));
+	uik_task_run(uik_task_add(task_update, 101, stack_update, STACK_LEN));
 
 	uik_run();
 
@@ -34,8 +40,8 @@ void task_a(void) {
 
 	while (1) {
 		dat = (dat + 1) % 16;
-		PORTB = ~dat;
-		_delay_ms(100);
+		out = (out & 0xF0) | dat;
+		uik_delay(5000);
 	}
 }
 
@@ -44,7 +50,13 @@ void task_b(void) {
 
 	while (1) {
 		dat = (dat + 1) % 16;
-		PORTB = ~(dat << 4);
-		_delay_ms(150);
+		out = (out & 0x0F) | (dat << 4);
+		uik_delay(7500);
+	}
+}
+
+void task_update(void) {
+	while (1) {
+		PORTB = ~out;
 	}
 }
