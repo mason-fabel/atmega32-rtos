@@ -10,8 +10,6 @@ all : $(OBJ)
 %.o : %.c
 	$(CC) $(CFLAGS) -c $<
 
-%.c : %.h defines.h
-
 defines.h : $(wildcard *.h)
 
 clean :
