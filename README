@@ -33,6 +33,12 @@ The program will begin running automatically after running 'make install'. To
 restart the program, hit the RESET switch on the development board.
 
 
+MISC
+====
+
+Breaks with 255 or more tasks
+
+
 SIZE
 ====
 

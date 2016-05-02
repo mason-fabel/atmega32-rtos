@@ -1,6 +1,6 @@
 APPLICATION_NAME := avr-os
 CC := avr-gcc
-CFLAGS := -mmcu=atmega32 -Wall -Wextra -Wpedantic -DF_CPU=8000000UL -O2
+CFLAGS := -mmcu=atmega32 -Wall -Wextra -Wpedantic -DF_CPU=1000000UL -O2
 SRC := $(wildcard *.c)
 OBJ := $(patsubst %.c, %.o, $(SRC))
 KERNEL_SRC := $(wildcard kernel/*.c)

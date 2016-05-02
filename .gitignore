@@ -5,3 +5,6 @@ avr-os
 
 # VIM temp files
 *.swp
+
+# Source archives
+huss3426.zip
