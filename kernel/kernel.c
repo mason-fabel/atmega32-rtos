@@ -36,7 +36,7 @@ void uik_run(void)  {
 
 void uik_delay(uint32_t cycles) {
 	_uik_context_save();
-	_uik_tcb[_uik_active_task].state = wait;
+	_uik_tcb[_uik_active_task].state = wait_delay;
 	_uik_tcb[_uik_active_task].delay = cycles / _uik_tick_len;
 	_uik_dispatch();
 	_uik_context_restore();
