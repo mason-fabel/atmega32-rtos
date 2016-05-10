@@ -23,13 +23,16 @@ void _uik_dispatch(void) {
 			case initialized:
 				break;
 
-			case wait:
+			case wait_delay:
 				if (_uik_tcb[i].delay <= 0) {
 					_uik_tcb[i].state = ready;
 				}
 
 				_uik_tcb[i].delay--;
 
+				break;
+
+			case wait_sem:
 				break;
 
 			case ready:
