@@ -1,7 +1,16 @@
 OVERVIEW
 ========
 
-???
+For a final project, I created a basic RTOS for the AVR processor. Features
+include:
+
+* Preemptive, priority-based scheduling
+* Semaphores
+* Event processing
+
+To use this RTOS in your own project, copy the kernel/ directory into your
+project and include kernel/kernel.h. Between the header file and the example
+program, use should be fairly self-explanitory.
 
 
 COMPILING
@@ -23,7 +32,7 @@ $ make install
 HARDWARE
 ========
 
-???
+Connect SWITCHES to PORTA and LEDS to PORTB.
 
 
 RUNNING
@@ -36,7 +45,10 @@ restart the program, hit the RESET switch on the development board.
 MISC
 ====
 
-Breaks with 255 or more tasks
+This kernel breaks with 255 or more tasks. Additionally, no bounds checks are
+made for event or semaphore IDs. Make sure to create resources before using them
+and don't be stupid and everthing should be fine. This project is more of an
+academic proof-of-concept than a production-ready RTOS. You have been warned.
 
 
 SIZE
@@ -46,10 +58,38 @@ As part of this assignment, we were asked to determine the size in bytes of
 each function used in this project. This data is most easily presented in a
 table.
 
-+-------------------------+------+
-| FUNCTION                | SIZE |
-+-------------------------+------+
-+-------------------------+------+
++--------------------+------+
+| FUNCTION           | SIZE |
++--------------------+------+
+| __vector_10        |  216 |
+| _uik_dispatch      |  250 |
+| _uik_task_idle     |    2 |
+| uik_initialize     |   58 |
+| uik_run            |  114 |
+| uik_delay          |  264 |
+| uik_task_run       |   34 |
+| uik_sem_create     |   20 |
+| uik_sem_signal     |  164 |
+| uik_sem_wait       |  286 |
+| uik_event_assoc    |  248 |
+| uik_event_disassoc |   56 |
+| uik_event_raise    |   82 |
+| main               |  130 |
+| init               |   42 |
+| task_button        |   20 |
+| task_increment     |   24 |
+| task_update        |   16 |
++--------------------+------+
+
+For the tick timer, I am using a 64x prescaler and firing a tick off every
+10 timer increments, or every 640 clock cycles. The tick handler consists of
+222 assembly instructions, so if we assume each instruction takes one clock
+cycle then this RTOS spends 34.69% of it's time in the tick handler. While this
+is incredibly inefficient, it also means that the highest priority task will
+never have to wait longer than 0.64 milliseconds before gaining access to the
+CPU. Effeciency can be increased by slowing down the tick timer, but this will
+cost responsiveness. As my example program is not computation heavy, I have
+chosen speed over efficiency.
 
 
 CREDITS
